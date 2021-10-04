@@ -20,6 +20,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("maven-publish")
+    id("org.jetbrains.dokka").version("1.5.0")
+    id("com.gladed.androidgitversion")
 }
 
 /*
@@ -85,7 +88,54 @@ android(object : Action<LibraryExtension> {
 
 dependencies {
     // Test rules and transitive dependencies:
-    implementation("androidx.compose.ui:ui-test-junit4:1.0.2")
+    api("androidx.compose.ui:ui-test-junit4:1.0.2")
     // Needed for createComposeRule, but not createAndroidComposeRule:
-    implementation("androidx.compose.ui:ui-test-manifest:1.0.2")
+    api("androidx.compose.ui:ui-test-manifest:1.0.2")
+}
+
+androidGitVersion {
+    codeFormat = "MNNPP"
+    baseCode = 1
+}
+
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.getByName("main").allSource)
+    from("${rootDir}/LICENSE") {
+        into("META-INF")
+    }
+}
+
+val dokkaJavadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+    dependsOn(tasks.dokkaJavadoc)
+    from(tasks.dokkaJavadoc.get().outputDirectory.get())
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            version = androidGitVersion.name()
+            // Creates a Maven publication called "release".
+            register("release", MavenPublication::class) {
+                from(components["release"])
+
+                artifact(sourcesJar)
+                artifact(dokkaJavadocJar)
+
+                pom {
+                    name.set("Morsa")
+                    description.set("Jetpack Compose UI Testing Framework")
+                    url.set("http://github.com/hyperdevs-team/morsa")
+
+                    licenses {
+                        license {
+                            name.set("The Apache License, Version 2.0")
+                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

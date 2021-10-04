@@ -50,8 +50,8 @@ buildscript {
 * **[Adrián García](https://github.com/adriangl)** - *Maintainer*
 
 ## Acknowledgements
-The ideas in this repository were based in the awesome work of the based on [Kakao](https://github.com/KakaoCup/Kakao) library that we used extensively
-to perform UI Testing with the traditional View system in Android. Go check them out!
+The ideas in this repository were based in the awesome work of the based on [Kakao](https://github.com/KakaoCup/Kakao)
+library that we used extensively to do UI Testing with the traditional `View` system in Android. Go check them out!
 
 ## License
 This project is licensed under the Apache Software License, Version 2.0.

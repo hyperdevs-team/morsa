@@ -27,9 +27,26 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
+        classpath("com.gladed.androidgitversion:gradle-android-git-version:0.4.14")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+plugins {
+    id("io.gitlab.arturbosch.detekt").version("1.18.1")
+}
+
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.18.1")
+}
+
+detekt {
+    toolVersion = "1.18.1"
+    source = files("${project.rootDir}/lib/src", "${project.rootDir}/app/src")
+    config = files("${project.rootDir}/detekt.yml")
+    autoCorrect = true
+    parallel = true
 }
 
 allprojects {
@@ -38,6 +55,8 @@ allprojects {
         google()
         jcenter()
     }
+
+    group = "com.github.hyperdevs"
 }
 
 tasks {
@@ -55,22 +74,6 @@ tasks {
     // Install hooks automatically before cleaning or building a new compilation
     // Idea from: https://gist.github.com/KenVanHoeylandt/c7a928426bce83ffab400ab1fd99054a
     clean.dependsOn(installGitHooks)
-    getByPath(":app:preBuild").dependsOn(installGitHooks)
-    getByPath(":lib:preBuild").dependsOn(installGitHooks)
-}
-
-plugins {
-    id("io.gitlab.arturbosch.detekt").version("1.18.1")
-}
-
-dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.18.1")
-}
-
-detekt {
-    toolVersion = "1.18.1"
-    source = files("${project.rootDir}/lib/src", "${project.rootDir}/app/src")
-    config = files("${project.rootDir}/detekt.yml")
-    autoCorrect = true
-    parallel = true
+    getByPath(":app:build").dependsOn(installGitHooks)
+    //getByPath(":lib:build").dependsOn(installGitHooks)
 }
