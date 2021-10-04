@@ -1,4 +1,4 @@
-# PoEditor Android Gradle Plug-in
+# Morsa: Jetpack Compose Testing Framework
 [![Release](https://jitpack.io/v/hyperdevs-team/morsa.svg)](https://jitpack.io/#hyperdevs-team/morsa)
 
 Test library to ease UI testing with Jetpack Compose
@@ -44,6 +44,56 @@ buildscript {
 
 ## How to use
 🚧🚧🚧🚧🚧
+Morsa is verbose and easy to use, we made use of testing tags, text values or content descriptions to find our views
+inside a Jetpack Compose scope making use of the `ComposeContentTestRule` class.
+
+First of all we need to declare our `MorsaScreen` targeting our desired views. These can be done using 3 methods:  
+- `withTag` which will search in your Compose view hierarchy for a component tagged with `Modifier.testTag(value)`.
+- `withText` which will search in your Compose view hierarchy for a component with the given text.
+- `withContentDescription` which will search in your Compose view hierarchy for a component tagged with `Modifier.contentDescription(value)`.
+
+```kotlin
+class LoginMorsaScreen(testRule: ComposeContentTestRule) : MorsaScreen<LoginMorsaScreen>(testRule) {
+    val usernameTextField = MTextField { withTag(USERNAME_TEXT_FIELD_DEFAULT_TAG) }
+    val passwordTextField = MTextField { withTag(PASSWORD_TEXT_FIELD_DEFAULT_TAG) }
+    val loginButton = MText { withTag(LOGIN_SCREEN_LOGIN_BUTTON_TAG) }
+    val errorView = MView { withTag(LOGIN_SCREEN_ERROR_BOX_TAG) }
+}
+```
+
+After declare our view we can start doing out testing:
+```kotlin
+
+class LoginContentTest {
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+    val screen = LoginMorsaScreen(composeTestRule)
+
+    @Test
+    fun login_shows_error_box_on_error() {
+
+        screen {
+            //Set your compose view, this can be a whole screen or a single component
+            setContent {
+                MyMaterialTheme {
+                    LoginContent()
+                }
+            }
+            //These values should trigger an error on our view showing our errorView component
+            usernameTextField { typeText("username@gmail.com") }
+            passwordTextField { typeText("password123") }
+
+            loginButton.click()
+            //Assert over the view
+            errorView {
+                exist()
+                isDisplayed()
+            }
+        }
+    }
+}
+```
 
 ## Authors & Collaborators
 * **[Francisco García Sierra](https://github.com/FrangSierra)** - *Initial work, Maintainer*
