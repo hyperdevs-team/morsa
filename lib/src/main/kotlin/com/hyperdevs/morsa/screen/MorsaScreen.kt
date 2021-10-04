@@ -1,3 +1,19 @@
+/*
+ * Copyright 2021 HyperDevs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.hyperdevs.morsa.screen
 
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -59,14 +75,12 @@ open class MorsaScreen<out T : MorsaScreen<T>>(private val composeTestRule: Comp
         function(this as T)
     }
 
-
     /**
      *  INNER VIEW CLASSES
      *
      *  These classes are marked as inner to avoid exposing outside the compose test rule. We could move it out if we find a way
      *  to make use of the rule(or just encapsulate it inside the screen).
      */
-
 
     /**
      * View with BaseActions and EditableActions

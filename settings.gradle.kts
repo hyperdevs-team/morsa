@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-package com.hyperdevs.morsa.actions
-
-/**
- * Provides actions for texts
- */
-interface TextActions : BaseActions
+rootProject.name = "morsa"
+include(":app")
+include(":lib")
