@@ -100,7 +100,8 @@ androidGitVersion {
 
 val sourcesJar by tasks.registering(Jar::class) {
     archiveClassifier.set("sources")
-    from(sourceSets.getByName("main").allSource)
+    description = "Assembles Kotlin sources for publication"
+    from(android.sourceSets.getByName("main").java.srcDirs)
     from("${rootDir}/LICENSE") {
         into("META-INF")
     }
@@ -108,6 +109,7 @@ val sourcesJar by tasks.registering(Jar::class) {
 
 val dokkaJavadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
+    description = "Assembles Kotlin docs with Dokka"
     dependsOn(tasks.dokkaJavadoc)
     from(tasks.dokkaJavadoc.get().outputDirectory.get())
 }
