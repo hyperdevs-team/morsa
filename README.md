@@ -1,10 +1,10 @@
-# Morsa: Jetpack Compose Testing Framework
+# Morsa: Jetpack Compose UI Testing Framework
 [![Release](https://jitpack.io/v/hyperdevs-team/morsa.svg)](https://jitpack.io/#hyperdevs-team/morsa)
 
 Test library to ease UI testing with Jetpack Compose
 
 ## Purpose
-🚧🚧🚧🚧🚧
+This library aims to add some useful wrappers and abstractions over common Espresso functions used while testing UI in your Android apps so you can write UI tests as fast as you create Compose screens. The library will also help you write more readable tests, thus improving their maintainability.
 
 ## Why `morsa`?
 🚧🚧🚧🚧🚧
@@ -44,13 +44,17 @@ buildscript {
 
 ## How to use
 🚧🚧🚧🚧🚧
-Morsa is verbose and easy to use, we made use of testing tags, text values or content descriptions to find our views
-inside a Jetpack Compose scope making use of the `ComposeContentTestRule` class.
+Morsa is verbose and easy to use. The library exposes function to find components based on testing tags, text values or content descriptions inside a Jetpack Compose scope making use of the `ComposeContentTestRule` class.
 
-First of all we need to declare our `MorsaScreen` targeting our desired views. These can be done using 3 methods:  
-- `withTag` which will search in your Compose view hierarchy for a component tagged with `Modifier.testTag(value)`.
-- `withText` which will search in your Compose view hierarchy for a component with the given text.
-- `withContentDescription` which will search in your Compose view hierarchy for a component tagged with `Modifier.contentDescription(value)`.
+First of all, you'll need to mark your components with either:
+* `Modifier.testTag(tag)`
+* `Modifier.contentDescription(contentDescription)`
+Or just be sure that you can find them with a given text so Morsa can find them.
+
+Then, in our test class we need to declare a `MorsaScreen` targeting the components that compose our screen. The components can be identified using the following functions:  
+* `withTag(tag)` will search in your Compose component hierarchy for a component tagged with `Modifier.testTag(tag)`.
+* `withText(text)` will search in your Compose component hierarchy for a component with the given text.
+* `withContentDescription(contentDescription)` will search in your Compose component hierarchy for a component marked with `Modifier.contentDescription(contentDescription)`.
 
 ```kotlin
 class LoginMorsaScreen(testRule: ComposeContentTestRule) : MorsaScreen<LoginMorsaScreen>(testRule) {
@@ -61,7 +65,7 @@ class LoginMorsaScreen(testRule: ComposeContentTestRule) : MorsaScreen<LoginMors
 }
 ```
 
-After declare our view we can start doing out testing:
+When your screen definition is done, you can start doing tests with it:
 ```kotlin
 
 class LoginContentTest {
@@ -72,7 +76,6 @@ class LoginContentTest {
 
     @Test
     fun login_shows_error_box_on_error() {
-
         screen {
             //Set your compose view, this can be a whole screen or a single component
             setContent {
@@ -95,13 +98,13 @@ class LoginContentTest {
 }
 ```
 
+## Acknowledgements
+The ideas in this library were based on the awesome [Kakao](https://github.com/KakaoCup/Kakao)
+library that we used extensively to do UI Testing with the traditional `View` system in Android. Go check them out!
+
 ## Authors & Collaborators
 * **[Francisco García Sierra](https://github.com/FrangSierra)** - *Initial work, Maintainer*
 * **[Adrián García](https://github.com/adriangl)** - *Maintainer*
-
-## Acknowledgements
-The ideas in this repository were based in the awesome work of the based on [Kakao](https://github.com/KakaoCup/Kakao)
-library that we used extensively to do UI Testing with the traditional `View` system in Android. Go check them out!
 
 ## License
 This project is licensed under the Apache Software License, Version 2.0.
